@@ -8,6 +8,7 @@ import { change } from "../../Features/authSlice";
 import { useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
+import { Animated } from "react-animated-css";
 
 const Login = () => {
   const initialValue = { gmail: "", password: "" };
@@ -34,7 +35,7 @@ const Login = () => {
         console.log("No such document!");
       }
       toast.success("Start your journey");
-      navigation("/home");
+      navigation("/dashboard");
     } catch (error) {
       console.log(error.message);
       if (error.message === "Firebase: Error (auth/user-not-found).") {
@@ -47,42 +48,55 @@ const Login = () => {
     }
   };
   return (
-    <Paper elevation={24} className="register">
-      <form autoComplete="off">
-        <Stack direction="column" spacing={6} className="form">
-          <Typography
-            variant="body1"
-            sx={{ textAlign: "end", cursor: "pointer" }}
-            onClick={() => {
-              navigate("/");
-            }}
-          >
-            create new account
-          </Typography>
-          <TextField
-            label="Gmail"
-            variant="outlined"
-            name="gmail"
-            value={formData.gmail}
-            onChange={(e) => handleChange(e, "gmail")}
-          />
-          <TextField
-            label="Password"
-            variant="outlined"
-            name="password"
-            value={formData.password}
-            onChange={(e) => handleChange(e, "password")}
-          />
-          <Button
-            block
-            variant="contained"
-            size="large"
-            className="buttons"
-            onClick={handleSubmit}
-          >
-            Login
-          </Button>
-        </Stack>
+    <Paper elevation={24} className="login">
+      <form autoComplete="off" className="login-form">
+        <Animated
+          animationIn="bounceInLeft"
+          animationOut="fadeOut"
+          isVisible={true}
+        >
+          <Stack direction="column" spacing={4} className="form">
+            <Typography
+              variant="body1"
+              sx={{ textAlign: "center", fontWeight: "bold" }}
+            >
+              login here
+            </Typography>
+            <TextField
+              label="Gmail"
+              variant="outlined"
+              name="gmail"
+              value={formData.gmail}
+              onChange={(e) => handleChange(e, "gmail")}
+            />
+            <TextField
+              label="Password"
+              variant="outlined"
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={(e) => handleChange(e, "password")}
+            />
+            <Typography
+              variant="body1"
+              sx={{ textAlign: "end", cursor: "pointer", fontWeight: "bold" }}
+              onClick={() => {
+                navigate("/");
+              }}
+            >
+              create new account
+            </Typography>
+            <Button
+              block
+              variant="contained"
+              size="large"
+              className="buttons"
+              onClick={handleSubmit}
+            >
+              Login
+            </Button>
+          </Stack>
+        </Animated>
       </form>
     </Paper>
   );

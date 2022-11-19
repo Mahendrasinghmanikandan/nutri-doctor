@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useState } from "react";
 import {
   Avatar,
@@ -16,7 +17,7 @@ import { Stack } from "@mui/system";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase/firebase";
 import { doc, setDoc } from "firebase/firestore";
-
+import { Animated } from "react-animated-css";
 const Register = () => {
   const initialValue = {
     gmail: "",
@@ -35,6 +36,7 @@ const Register = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialValue);
   const [extra, setExtra] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isCustomer, setIsCustomer] = useState(null);
 
   const handleChange = (e, name) => {
@@ -81,157 +83,171 @@ const Register = () => {
   };
   return (
     <Paper elevation={24} className="register">
-      <form autoComplete="off">
-        <Stack direction="column" spacing={4} className="form">
-          <Typography
-            variant="body1"
-            sx={{ textAlign: "end", cursor: "pointer" }}
-            onClick={() => {
-              navigate("/login");
-            }}
-          >
-            Already have account
-          </Typography>
-          <TextField
-            label="Gmail"
-            variant="outlined"
-            name="gmail"
-            value={formData.gmail}
-            onChange={(e) => handleChange(e, "gmail")}
-          />
-          <TextField
-            label="Password"
-            variant="outlined"
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={(e) => handleChange(e, "password")}
-          />
+      <form autoComplete="off" className="register-form ">
+        <Animated
+          animationIn="bounceInLeft"
+          animationOut="fadeOut"
+          isVisible={true}
+        >
+          <Stack direction="column" spacing={4} className="form">
+            <Typography
+              variant="body1"
+              sx={{ textAlign: "center", fontWeight: "bold" }}
+            >
+              Create your account here
+            </Typography>
+            <TextField
+              label="Gmail"
+              variant="outlined"
+              name="gmail"
+              value={formData.gmail}
+              onChange={(e) => handleChange(e, "gmail")}
+            />
+            <TextField
+              label="Password"
+              variant="outlined"
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={(e) => handleChange(e, "password")}
+            />
 
-          <FormControl fullWidth name="gender">
-            <InputLabel id="demo-simple-select-label">gender</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={formData.gender}
-              label="gender"
-              onChange={(e) => handleChange(e, "gender")}
-            >
-              <MenuItem value="male">male</MenuItem>
-              <MenuItem value="female">female</MenuItem>
-              <MenuItem value="others">others</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField
-            label="contact"
-            variant="outlined"
-            name="contact"
-            type="number"
-            value={formData.contact}
-            onChange={(e) => handleChange(e, "contact")}
-          />
-          <FormControl fullWidth name="status">
-            <InputLabel id="demo-simple-select-label">who you are</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={formData.status}
-              label="who you are"
-              onChange={(e) => handleChange(e, "status")}
-            >
-              <MenuItem value="customer">customer</MenuItem>
-              <MenuItem value="doctor">doctor</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField
-            label="name"
-            variant="outlined"
-            name="name"
-            value={formData.name}
-            onChange={(e) => handleChange(e, "name")}
-          />
-          {extra ? (
-            isCustomer === "customer" ? (
-              <>
-                <TextField
-                  label="height"
-                  variant="outlined"
-                  type="number"
-                  name="height"
-                  value={formData.height}
-                  onChange={(e) => handleChange(e, "height")}
-                />
-                <TextField
-                  label="weight"
-                  variant="outlined"
-                  type="number"
-                  name="weight"
-                  value={formData.weight}
-                  onChange={(e) => handleChange(e, "weight")}
-                />
-                <TextField
-                  label="age"
-                  variant="outlined"
-                  type="number"
-                  name="age"
-                  value={formData.age}
-                  onChange={(e) => handleChange(e, "age")}
-                />
-                <FormControl fullWidth name="foodType">
-                  <InputLabel id="demo-simple-select-label">
-                    foodType
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={formData.foodType}
-                    label="foodType"
-                    onChange={(e) => handleChange(e, "foodType")}
-                  >
-                    <MenuItem value="veg">veg</MenuItem>
-                    <MenuItem value="non-veg">non-veg</MenuItem>
-                  </Select>
-                </FormControl>
-              </>
+            <FormControl fullWidth name="gender">
+              <InputLabel id="demo-simple-select-label">gender</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={formData.gender}
+                label="gender"
+                onChange={(e) => handleChange(e, "gender")}
+              >
+                <MenuItem value="male">male</MenuItem>
+                <MenuItem value="female">female</MenuItem>
+                <MenuItem value="others">others</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              label="contact"
+              variant="outlined"
+              name="contact"
+              type="number"
+              value={formData.contact}
+              onChange={(e) => handleChange(e, "contact")}
+            />
+            <TextField
+              label="name"
+              variant="outlined"
+              name="name"
+              value={formData.name}
+              onChange={(e) => handleChange(e, "name")}
+            />
+            <FormControl fullWidth name="status">
+              <InputLabel id="demo-simple-select-label">who you are</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={formData.status}
+                label="who you are"
+                onChange={(e) => handleChange(e, "status")}
+              >
+                <MenuItem value="customer">customer</MenuItem>
+                <MenuItem value="doctor">doctor</MenuItem>
+              </Select>
+            </FormControl>
+
+            {extra ? (
+              isCustomer === "customer" ? (
+                <>
+                  <TextField
+                    label="height"
+                    variant="outlined"
+                    type="number"
+                    name="height"
+                    value={formData.height}
+                    onChange={(e) => handleChange(e, "height")}
+                  />
+                  <TextField
+                    label="weight"
+                    variant="outlined"
+                    type="number"
+                    name="weight"
+                    value={formData.weight}
+                    onChange={(e) => handleChange(e, "weight")}
+                  />
+                  <TextField
+                    label="age"
+                    variant="outlined"
+                    type="number"
+                    name="age"
+                    value={formData.age}
+                    onChange={(e) => handleChange(e, "age")}
+                  />
+                  <FormControl fullWidth name="foodType">
+                    <InputLabel id="demo-simple-select-label">
+                      foodType
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={formData.foodType}
+                      label="foodType"
+                      onChange={(e) => handleChange(e, "foodType")}
+                    >
+                      <MenuItem value="veg">veg</MenuItem>
+                      <MenuItem value="non-veg">non-veg</MenuItem>
+                    </Select>
+                  </FormControl>
+                </>
+              ) : (
+                <>
+                  <TextField
+                    label="specialization"
+                    variant="outlined"
+                    name="age"
+                    value={formData.specialization}
+                    onChange={(e) => handleChange(e, "specialization")}
+                  />
+                  <FormControl fullWidth name="experience">
+                    <InputLabel id="demo-simple-select-label">
+                      experience
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={formData.experience}
+                      label="foodType"
+                      onChange={(e) => handleChange(e, "experience")}
+                    >
+                      <MenuItem value="yes">yes</MenuItem>
+                      <MenuItem value="no">no</MenuItem>
+                    </Select>
+                  </FormControl>
+                </>
+              )
             ) : (
-              <>
-                <TextField
-                  label="specialization"
-                  variant="outlined"
-                  name="age"
-                  value={formData.specialization}
-                  onChange={(e) => handleChange(e, "specialization")}
-                />
-                <FormControl fullWidth name="experience">
-                  <InputLabel id="demo-simple-select-label">
-                    experience
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={formData.experience}
-                    label="foodType"
-                    onChange={(e) => handleChange(e, "experience")}
-                  >
-                    <MenuItem value="yes">yes</MenuItem>
-                    <MenuItem value="no">no</MenuItem>
-                  </Select>
-                </FormControl>
-              </>
-            )
-          ) : (
-            ""
-          )}
-          <Button
-            block
-            className="buttons"
-            variant="contained"
-            size="large"
-            onClick={handleSubmit}
-          >
-            create new account
-          </Button>
-        </Stack>
+              ""
+            )}
+            <Typography
+              variant="body1"
+              sx={{ textAlign: "end", cursor: "pointer", fontWeight: "bold" }}
+              onClick={() => {
+                navigate("/login");
+              }}
+            >
+              Already have an account
+            </Typography>
+            <Button
+              disabled={loading}
+              block
+              className="buttons"
+              variant="contained"
+              size="large"
+              onClick={handleSubmit}
+            >
+              create new account
+            </Button>
+          </Stack>
+        </Animated>
       </form>
     </Paper>
   );

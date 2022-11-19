@@ -9,13 +9,14 @@ import {
   ListItemText,
   Paper,
   Stack,
+  Tooltip,
 } from "@mui/material";
 import { auth, db } from "../firebase/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { change } from "../Features/authSlice";
 import { useSelector } from "react-redux";
 import moment from "moment";
-
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useDispatch } from "react-redux";
 import {
   collection,
@@ -46,6 +47,7 @@ const Message = ({ current_User, currentChat, current_name, fullData }) => {
   var date_time = current_date + " " + current_time;
   const handleSend = async () => {
     const formData = {
+      sender_name: currentUser.name,
       sender: current_User,
       receiver: currentChat,
       uid: ids,
@@ -88,30 +90,22 @@ const Message = ({ current_User, currentChat, current_name, fullData }) => {
           spacing={1}
           alignItems="center"
           sx={{ cursor: "pointer" }}
-          onClick={() => {
-            setViewDetails(!viewDetails);
-          }}
         >
           <Avatar>{current_name?.split("")[0].toUpperCase()}</Avatar>
-          <h4>{current_name}</h4>
+          <h4 style={{ textTransform: "capitalize" }}>{current_name}</h4>
         </Stack>
+
         <div>
-          <div className="logout-button">
-            <Button
-              variant="outlined"
-              className="buttons"
-              size="large"
+          <Tooltip title={`click to know more about ${fullData.name}`} arrow>
+            <MoreVertIcon
               onClick={() => {
-                console.log("enter");
-                dispatch(change({ user: {} }));
-                navigation("/login");
+                setViewDetails(!viewDetails);
               }}
-            >
-              Logout
-            </Button>
-          </div>
+            />
+          </Tooltip>
         </div>
       </div>
+
       {viewDetails ? (
         <Profile fullData={fullData} />
       ) : (
@@ -127,7 +121,7 @@ const Message = ({ current_User, currentChat, current_name, fullData }) => {
                     <ListItem className="msgs">
                       <ListItemAvatar>
                         <Avatar>
-                          {currentUser.name?.split("")[0].toUpperCase()}
+                          {res?.sender_name?.split("")[0].toUpperCase()}
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText

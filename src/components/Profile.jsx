@@ -1,24 +1,7 @@
-import {
-  Avatar,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from "@mui/material";
 import { Stack } from "@mui/system";
 import React from "react";
 
 const Profile = ({ fullData }) => {
-  console.log(fullData);
   return (
     <Stack
       spacing={4}

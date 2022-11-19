@@ -5,6 +5,10 @@ import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { Avatar, Button, Stack } from "@mui/material";
 import Welcome from "../components/Welcome";
 import Message from "../components/Message";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Animated } from "react-animated-css";
+import _ from "lodash";
 
 const Home = () => {
   const currentUser = useSelector((data) => data.auth.values.user);
@@ -14,6 +18,7 @@ const Home = () => {
   const [currentChat, setCurrentChat] = useState(null);
   const [fullData, setFullData] = useState(null);
   const [current_User] = useState(currentUser.gmail);
+
   const fetchData = async () => {
     try {
       const q = query(
@@ -57,13 +62,23 @@ const Home = () => {
           <div className="members">
             {data.map((res) => {
               return (
-                <div
-                  className="members-card"
-                  onClick={() => handleStartChat(res.gmail, res.name, res)}
-                >
-                  <Avatar>{res?.name?.split("")[0].toUpperCase()}</Avatar>
-                  <h4>{res.name}</h4>
-                </div>
+                <>
+                  <Animated
+                    animationIn="zoomIn"
+                    animationOut="fadeOut"
+                    isVisible={true}
+                  >
+                    <div
+                      className="members-card"
+                      onClick={() => handleStartChat(res.gmail, res.name, res)}
+                    >
+                      <Avatar>{res?.name?.split("")[0].toUpperCase()}</Avatar>
+                      <h4 style={{ textTransform: "capitalize" }}>
+                        {res.name}
+                      </h4>
+                    </div>
+                  </Animated>
+                </>
               );
             })}
           </div>
@@ -71,23 +86,42 @@ const Home = () => {
             direction="row"
             spacing={1}
             alignItems="center"
-            justifyContent="center"
-            className="left-header"
+            justifyContent="space-around"
           >
-            {/* <Avatar>{currentUser?.name?.split("")[0].toUpperCase()}</Avatar> */}
-            <h4>{currentUser.name}</h4>
+            {" "}
+            {/* <h4>{currentUser.name}</h4> */}
+            {/* <div className="logout-button">
+              <Button
+                variant="outlined"
+                className="buttons"
+                size="large"
+                onClick={() => {
+                  console.log("enter");
+                  dispatch(change({ user: {} }));
+                  navigation("/login");
+                }}
+              >
+                Logout
+              </Button>
+            </div> */}
           </Stack>
         </div>
         <div className="right">
           {!startChat ? (
             <Welcome />
           ) : (
-            <Message
-              current_User={current_User}
-              current_name={current_name}
-              currentChat={currentChat}
-              fullData={fullData}
-            />
+            <Animated
+              animationIn="zoomIn"
+              animationOut="fadeOut"
+              isVisible={true}
+            >
+              <Message
+                current_User={current_User}
+                current_name={current_name}
+                currentChat={currentChat}
+                fullData={fullData}
+              />
+            </Animated>
           )}
         </div>
       </div>
