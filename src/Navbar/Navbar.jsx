@@ -12,6 +12,7 @@ const Navbar = () => {
   const navigation = useNavigate();
   const dispatch = useDispatch();
   const currentUser = useSelector((data) => data.auth.values.user);
+
   return (
     <div className="navbar-container">
       <div className="navbar">

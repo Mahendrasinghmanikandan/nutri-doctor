@@ -160,7 +160,7 @@
   width: 100%;
   padding: 10px;
   margin: 10px;
-  height: 500px !important;
+  height: 400px !important;
   justify-content: center;
   .msgs {
     background: white;
@@ -210,4 +210,8 @@ th {
 
 .actives{
   color: hotpink !important;
+}
+
+.current-chat{
+    background-color: lightgreen;
 }

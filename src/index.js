@@ -19,9 +19,16 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <ToastContainer />
-      <Provider store={store}>
-        <App />
-      </Provider>
+      <div className="home">
+        <video preload="auto" autoplay={"autoplay"} loop muted>
+          <source src="./video/home.mp4"></source>
+        </video>
+        <div className="content">
+          <Provider store={store}>
+            <App />
+          </Provider>
+        </div>
+      </div>
     </BrowserRouter>
   </React.StrictMode>
 );

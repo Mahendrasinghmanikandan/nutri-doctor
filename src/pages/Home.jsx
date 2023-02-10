@@ -12,6 +12,7 @@ import _ from "lodash";
 
 const Home = () => {
   const currentUser = useSelector((data) => data.auth.values.user);
+
   const [data, setData] = useState([]);
   const [startChat, setStartChat] = useState(false);
   const [current_name, setCurrent_name] = useState(null);
@@ -37,6 +38,7 @@ const Home = () => {
     }
   };
   const handleStartChat = (value, name, data) => {
+    // console.log(value, name, data);
     setStartChat(true);
     setCurrentChat(value);
     setCurrent_name(name);
@@ -55,10 +57,17 @@ const Home = () => {
               setStartChat(false);
             }}
           >
-            <h4>
-              <span>N</span>utri <span>D</span>octor
-            </h4>
+            {startChat ? (
+              <>
+                <b>{currentUser?.name}</b>
+              </>
+            ) : (
+              <h4>
+                <span>N</span>utri <span>D</span>octor
+              </h4>
+            )}
           </div>
+
           <div className="members">
             {data.map((res) => {
               return (
@@ -69,10 +78,23 @@ const Home = () => {
                     isVisible={true}
                   >
                     <div
-                      className="members-card"
+                      className={
+                        currentChat === res.gmail
+                          ? " members-card current-chat"
+                          : "members-card"
+                      }
                       onClick={() => handleStartChat(res.gmail, res.name, res)}
                     >
-                      <Avatar>{res?.name?.split("")[0].toUpperCase()}</Avatar>
+                      <Avatar
+                        sx={
+                          currentChat === res.gmail && {
+                            bgcolor: "white",
+                            color: "black",
+                          }
+                        }
+                      >
+                        {res?.name?.split("")[0].toUpperCase()}
+                      </Avatar>
                       <h4 style={{ textTransform: "capitalize" }}>
                         {res.name}
                       </h4>

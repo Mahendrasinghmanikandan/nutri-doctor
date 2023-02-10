@@ -29,6 +29,7 @@ import { useNavigate } from "react-router-dom";
 import { uid } from "uid";
 import Profile from "./Profile";
 const Message = ({ current_User, currentChat, current_name, fullData }) => {
+  console.log(current_User, currentChat, current_name, fullData);
   const [currentMessage, setCurrentMessage] = useState("");
   const [data, setData] = useState([]);
   const [viewDetails, setViewDetails] = useState(false);
@@ -80,18 +81,20 @@ const Message = ({ current_User, currentChat, current_name, fullData }) => {
   };
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [currentChat]);
 
   return (
     <div className="message">
-      <div className="message_header">
+      <div className="message_header current-chat">
         <Stack
           direction="row"
           spacing={1}
           alignItems="center"
           sx={{ cursor: "pointer" }}
         >
-          <Avatar>{current_name?.split("")[0].toUpperCase()}</Avatar>
+          <Avatar sx={{ bgcolor: "white", color: "black" }}>
+            {current_name?.split("")[0].toUpperCase()}
+          </Avatar>
           <h4 style={{ textTransform: "capitalize" }}>{current_name}</h4>
         </Stack>
 
